@@ -56,8 +56,62 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-   void display7SEG (int num){
-   switch(num){
+int timer1_flag = 0;
+int counter1 = 0;
+void setTimer1(int duration){
+	counter1 = duration;
+	timer1_flag = 0;
+}
+
+void timerRun(){
+	if(counter1 > 0){
+		counter1--;
+		if(counter1 <= 0){
+			timer1_flag = 1;
+              }
+	}
+}
+void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
+     timerRun();
+}
+int index_led = 0;
+int n=1;
+
+void updateled_buffer(int n){
+	int led_buffer[4] = {1,2,3,4};
+	switch(led_buffer[n]){
+	case 1:
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 0);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
+		   break;
+	case 2:
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 0);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
+		   break;
+	case 3:
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 0);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
+		   break;
+	case 4:
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 0 );
+		   break;
+	default:
+		break;
+	}
+}
+
+
+void display7SEG (int index){
+   switch(index){
    case 0:
   	 // set Status
   		HAL_GPIO_WritePin(SEG0_GPIO_Port, SEG0_Pin, GPIO_PIN_RESET);
@@ -152,25 +206,6 @@ static void MX_TIM2_Init(void);
            }
    }
 
-int index_led=0;
-int led_buffer[4]={1,2,3,4};
-void update7SEG(int index){
-	switch(index){
-	case 0:
-
-		break;
-	case 1:
-
-	    break;
-	case 2:
-
-	    break;
-	case 3:
-
-	    break;
-
-	}
-}
 
 
 
@@ -211,8 +246,22 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+int n = 0;
+int index = 0;
+setTimer1(1);
   while (1)
   {
+	  if (timer1_flag == 1){
+	  setTimer1(25);
+	  display7SEG(index ++);
+	  updateled_buffer(n++);
+	  if (index >= 4)
+	  index = 0;
+	  if (n >= 4 ){
+	  n = 0;
+	  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);}
+	       }
+
 
     /* USER CODE END WHILE */
 
@@ -343,44 +392,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter=40;
-void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
-	          counter--;
-		      if(counter <=0){
-		      counter = 20;
-		      HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
-		      HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
-			  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin,GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
-	 	 	  display7SEG(1);
-		      }
-		      else if (counter == 5){
 
-		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-		      HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_RESET);
-		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
-		      HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
-	          display7SEG(2);
-		      }
-		      else if (counter == 10){
-		      HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
-		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-		      HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
-		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_RESET);
-		      HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
-		      display7SEG(3);
-		      }else if (counter == 15){
-
-			  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
-			  HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_RESET);
-		      display7SEG(0);
-			   }
-
-  }
 /* USER CODE END 4 */
 
 /**
