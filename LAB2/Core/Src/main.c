@@ -329,7 +329,7 @@ int counter=40;
 void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
 	          counter--;
 		      if(counter <=0){
-		      counter = 40;
+		      counter = 20;
 		      HAL_GPIO_TogglePin(LED_RED_GPIO_Port,LED_RED_Pin);
 		      HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
 			  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin,GPIO_PIN_RESET);
@@ -338,28 +338,28 @@ void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
 			  HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
 	 	 	  display7SEG(1);
 		      }
-		      else if (counter == 10){
-		    	  HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
+		      else if (counter == 5){
+
 		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
 		      HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_RESET);
 		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
 		      HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
 	          display7SEG(2);
 		      }
-		      else if (counter == 20){
-		    	  HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
+		      else if (counter == 10){
+		      HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
 		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
 		      HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
 		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_RESET);
 		      HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_SET);
 		      display7SEG(3);
-		      }else if (counter == 30){
-		    	  HAL_GPIO_TogglePin(DOT_GPIO_Port,DOT_Pin);
-			   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
-			   HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
-			   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
-			   HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_RESET);
-		       display7SEG(0);
+		      }else if (counter == 15){
+
+			  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(EN1_GPIO_Port,EN1_Pin, GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin,GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(EN3_GPIO_Port,EN3_Pin, GPIO_PIN_RESET);
+		      display7SEG(0);
 			   }
 
   }
