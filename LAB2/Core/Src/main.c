@@ -56,24 +56,24 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int timer1_flag = 0;
-int counter1 = 0;
-void setTimer1(int duration){
-	counter1 = duration;
-	timer1_flag = 0;
-}
-
-void timerRun(){
-	if(counter1 > 0){
-		counter1--;
-		if(counter1 <= 0){
-			timer1_flag = 1;
-              }
-	}
-}
-void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
-     timerRun();
-}
+//int timer1_flag = 0;
+//int counter1 = 0;
+//void setTimer1(int duration){
+//	counter1 = duration;
+//	timer1_flag = 0;
+//}
+//
+//void timerRun(){
+//	if(counter1 > 0){
+//		counter1--;
+//		if(counter1 <= 0){
+//			timer1_flag = 1;
+//              }
+//	}
+//}
+//void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim2 ){
+//     timerRun();
+//}
 int index_led = 0;
 
 int led_buffer[4] ;
@@ -81,22 +81,21 @@ int digit1;
 int digit2;
 int digit3;
 int digit4;
+
 void updateClockBuffer(int a, int b){
 	digit1=a/10;
 	digit2=a%10;
 	digit3=b/10;
     digit4=b%10;
-    led_buffer[1]=digit1;
-    led_buffer[2]=digit2;
-    led_buffer[3]=digit3;
-    led_buffer[4]=digit4;
+    led_buffer[1]=digit1;//1
+    led_buffer[2]=digit2;//0
+    led_buffer[3]=digit3;//3
+    led_buffer[4]=digit4;//0
 }
 
 
-
-
 void display7SEG (int n){
-   switch(led_buffer[n]){
+   switch(n){
    case 0:
   	 // set Status
   		HAL_GPIO_WritePin(SEG0_GPIO_Port, SEG0_Pin, GPIO_PIN_RESET);
@@ -191,40 +190,43 @@ void display7SEG (int n){
            }
    }
 
+
+
 void updateled_buffer(int n){
 	switch(n){
 	case 1:
-		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 0);
-		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
-		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
-		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
-		   display7SEG(n);
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
+		   display7SEG(led_buffer[1]);
 		   break;
 	case 2:
-		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
-		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 0);
-		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
-		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
-		   display7SEG(n);
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin,GPIO_PIN_RESET);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
+		   display7SEG(led_buffer[2]);
 		   break;
 	case 3:
-		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
-		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
-		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 0);
-		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 1);
-		   display7SEG(n);
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
+		   display7SEG(led_buffer[3]);
 		   break;
 	case 4:
-		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
-		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
-		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
-		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, 0 );
-		   display7SEG(n);
+		   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
+		   HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_RESET );
+		   display7SEG(led_buffer[4]);
 		   break;
 	default:
 		break;
 	}
 }
+
 
 /* USER CODE END 0 */
 
@@ -263,28 +265,29 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int hour = 15 , minute = 8 , second = 50;
+//  int hour = 0 , minute = 0 , second = 0;
 
   while (1)
   {
 
-	  if ( second >= 60) {
-	   second = 0;
-	   minute ++;
+//	  if ( second >= 60) {
+//	   second = 0;
+//	   minute ++;}
+//
+//
+//	  if( minute >= 60) {
+//	   minute = 0;
+//	   hour ++;}
+//
+//	   if( hour >=24) {
+//	   hour = 0;
+//	   }
 
 
-	  if( minute >= 60) {
-	   minute = 0;
-	   hour ++;
+	  updateClockBuffer(10, 24);
+//	  second++;
+//	  HAL_Delay (1000) ;
 
-	   if( hour >=24) {
-	   hour = 0;
-	   }
-	  }
-	  second++;
-	   updateClockBuffer(hour, minute);
-	   HAL_Delay (1000) ;
-	  }
 
 
 
