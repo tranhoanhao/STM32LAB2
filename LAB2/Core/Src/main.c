@@ -433,12 +433,12 @@ int hour=0,minute=8,second=50;
 	  }
 
 	  if(timer4_flag == 1){
-	 	          	  updateLEDMatrix(index_led_matrix++);
-	 	          	  if(index_led_matrix == MAX_LED_MATRIX){
-	 	          		 index_led_matrix = 0;
+	 	   updateLEDMatrix(index_led_matrix++);
+	  if(index_led_matrix == MAX_LED_MATRIX){
+	 	   index_led_matrix = 0;
 	 	          	  }
-	 	          	  setTimer4(5);
-	 	            }
+	 	   setTimer4(5);
+	  }
 
 
     /* USER CODE END WHILE */
